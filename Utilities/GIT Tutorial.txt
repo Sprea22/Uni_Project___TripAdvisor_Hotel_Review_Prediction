@@ -1,0 +1,114 @@
+################ LOCAL ################ 
+
+git init  --> inizializza la repositori vuota
+
+git clone URL x  --> clona qui la repo dell'url, in una cartella di nome "x"
+
+git status  --> mostra lo status della repository
+
+git log  --> mostra tutte le commit fatte alla repo 
+             flag: --oneline -> mostra solo SHA e commento
+		   --stat    -> mostra il nome dei file modificati e il
+				numero di righe modificate
+		   -p    -> mostra effettivamente le righe 
+			    modificate, e la loro posizione 
+		   --decorate        -> visualizza i tag nelle commit
+		   --all     -> visualizza le commit di tutti i branch
+		   --graph   -> crea il grafico dei branch
+		   --author = "name" -> filtra le commit dello user name
+		   --grep = "bug"    -> filtra le commit che contentono bug
+					nel commento 
+	     si può aggiungere uno SHA per mostrare le commit successive 
+
+git show SHA  --> mostra solo la commit con il relativo SHA
+
+git add file1 file2  --> aggiunge i file agli staging file
+
+git add .  -->  aggiunge tutti i file modificati algi staging file che 
+	  	NON sono nel file .gitignore (in .git)
+
+git rm --cached file1  --> rimuove il file dagli staging file
+
+git commit  --> salva gli staging file nella repo
+	 	flag: -m "commento" -> non apre l'editor per il commento
+		      --amend -> modifica l'ultima commit invece di
+				 crearne una nuova
+
+git diff  --> evidenzia le differenze tra i file in locale e gli staging file
+
+git tag SHA x  --> aggiunge alla commit con quello SHA il tag x
+		   flag: -d -> elimina il tag invece di aggiungerlo
+
+git tag  --> visualizza i tag della repo
+
+git branch  --> elenca le branch presenti nella repo
+
+git branch b1 SHA  --> crea un branche alla commit con quello SHA
+		       se SHA non è presente usa la commit puntata da Head
+		       flag: -d -> cancella il branch se è stato mergiato				    
+			     -D -> forza la cancellazione di un branche non
+				   mergiato
+
+git checkout b1  --> posiziona Head sull'ultima commit del branch b1
+		     flag: -b -> crea il branch b1, poi sposta Head
+
+git revert SHA  --> esegue la commit con quello SHA al contrario 
+		    (undo delle modifiche di quella commit, senza eliminarla)
+
+NB esiste git reset per eliminare una commit, ma è complesso, cerco bene come si fa.. oppure meglio ancora non lo faccio proprio
+   (git reset --soft HEAD~1)
+
+git merge b1  --> mergia il branch puntato da Head con b1
+
+
+
+################ REMOTE ################
+
+per utilizzare una repo remota andare su GitHub, creare una repo e runnare il codice suggerito
+[1) e 2)] nella cartella del progetto (che deve essere inizializzata a repo locale)
+
+1) git remote add origin URL  --> aggiungo uno shortcut assegnando origin come
+				  nome per la repo remota all'indirizzo URL
+
+2) git push -u origin master  --> copia e mergia la repo origin nel branch
+				  master della repo locale
+
+
+per copiare una repo di un altro utente è possibile fare una FORK di una repo,
+ovvero creare una copia remota di una repo remota (in cui non si potrebbe lavorare
+perchè non si hanno i permessi).
+La fork effettua una copia remota, quindi per poter lavorare in locale è
+necessario runnare un git clone.
+
+
+git remote  --> mostra il nome della repo remota
+		flag: -v -> mostra l'url della repo remota
+
+git remote add x URL  --> aggiunge uno shortcut per chiamare la repo remota
+			     all'indirizzo URL rindominandola x 
+
+git rename new old --> rinomina la repo remota old come new
+
+git fetch repo_rem branch_repo_rem  --> copia repo_rem in un branch
+					(branch_repo_rem) in remoto e non
+					effettua nessun merge
+					(origin e HEAD puntano a commit
+					diverse)
+NB fetch è utile se qualcuno sta lavorando con te e fa commit strane git or
+
+git pull repo_rem branch_repo  --> copia repo_rem in branch_repo (in locale)
+				   ed effettua la merge tra i due rami
+				   (origin e HEAD puntano alla stessa commit)
+
+git push repo_remo branch_repo_loc --> copia il branch locale nella repo remota
+
+git shortlog  --> mostra l'insieme ordinato degli user che hanno effettuato
+		  almeno una commit e la relativa commit.
+		  flag: -s -> show just the number of commits
+	         	-n -> sort them numerically 
+		  più bene o male i tutti i flag di log
+
+git rebase -i HEAD~3  --> unisce le ultime 3 commit in una sola più grossa 
+
+NB
+attenzione ad untilizzare rebase, rischia di lasciare commit irraggiungibili se prima non si effettua un corretto branching 
