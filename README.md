@@ -4,9 +4,9 @@ Using naive bayes to predict overall ratings in tripadvisor reviews.
 
 ### Group Members
 
-Prete Francesco
-Spereafico Andrea
-Rima Mirko
+*Prete Francesco
+*Spereafico Andrea
+*Rima Mirko
 
 ### License
 
