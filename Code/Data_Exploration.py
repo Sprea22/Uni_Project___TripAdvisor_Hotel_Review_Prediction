@@ -3,8 +3,8 @@ import pandas as pd
 import glob
 import re
 
-Full_Dataset_Reviews = pd.read_csv("FINAl_Datasets/Full_Dataset_Reviews.csv")
-Full_Dataset_Hotels = pd.read_csv("FINAl_Datasets/Hotel_Full_Dataset_FINAL.csv")
+Full_Dataset_Reviews = pd.read_csv("../Datasets/Full_Dataset_Reviews.csv")
+Full_Dataset_Hotels = pd.read_csv("../Datasets/Full_Dataset_Hotel.csv")
 
 # Ner of reviewed hotels
 N_Hotels = Full_Dataset_Reviews['Hotel_ID'].nunique()
