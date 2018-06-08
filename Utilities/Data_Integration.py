@@ -11,7 +11,7 @@ Training_Dataset = pd.DataFrame( columns=columns2)
 Full_Dataset_CSV = pd.DataFrame( columns=columns2)
 
 # Decomment if you want to integrate all the training & testing CSV files in two unique CSV files
-'''
+
 for filename in glob.glob("Generated_Datasets/Testing_CSV/*.csv"):
     temp_file = pd.read_csv(filename)
     Testing_Dataset = Testing_Dataset.append(temp_file)
@@ -25,7 +25,7 @@ for filename in glob.glob("Generated_Datasets/Training_CSV/*.csv"):
     Training_Dataset = Training_Dataset.append(temp_file)
 
 Training_Dataset.to_csv(path_or_buf = 'Training_Dataset_FINAL.csv', columns = columns2, index = False)
-'''
+
 
 # Decomment if you want to merge to different dataframes
 
