@@ -4,7 +4,6 @@ from pgmpy.factors.discrete import TabularCPD
 
 def Generate_CPTs(data_cpts, data, cols, root):
     cpts_list = []
-    print(cols)
     for i in cols:
         if (i == root):
             cpt = TabularCPD(
