@@ -5,7 +5,7 @@ from Tkinter import *
 from PIL import Image, ImageTk
 import matplotlib
 
-############ Frequency Filtering ############
+############ Update Overall ############
 def update_overall():
     parameter_1.insert(INSERT, "")
     parameter_1.insert(END, "")
@@ -316,12 +316,14 @@ rate5.grid(row=11, column=12)
 def create_window():
     subroot = Toplevel()
     subroot.title("Bayesian Network Model")
-    subroot.geometry('500x400')
+    #subroot.geometry('500x400')
+    width = subroot.winfo_screenwidth()
+    height = subroot.winfo_screenheight()
+    subroot.geometry('%sx%s' % (width, height))
     subroot.configure(background='white')
-    canvas = Canvas(subroot, width = 500, height = 400)
     tk_img = ImageTk.PhotoImage(file='ImageBayesianNet.png')
-    canvas = tk.Canvas(subroot, width=450, height=350,bg = 'white', highlightbackground='white')
-    canvas.create_image(240, 180, image=tk_img, anchor = CENTER)
+    canvas = tk.Canvas(subroot, width=1350, height=600,bg = 'white', highlightbackground='black')
+    canvas.create_image(650, 400, image=tk_img, anchor = CENTER)
     canvas.grid(row=1, column=1, pady = 5)
     close_window = tk.Button(subroot, text="Close Window", command=subroot.destroy, font='Helvetica 10 bold',bg='#ff4500',fg='black')
     close_window.grid(row = 2, column = 1)
@@ -370,12 +372,25 @@ rate5.config(indicatoron=0, bd=1, width=2, value='rate5')
 rate5.grid(row=13, column=6)
 
 ################################################################################
-################################################################################
+
 label_predictvalue = tk.Label(root, text= "Predict value:4", font='Helvetica 16 bold',bg = '#599442')
 label_predictvalue.grid(row = 14, column = 1, padx=10)
 
 label_probability = tk.Label(root, text= "Prob: 95%", font='Helvetica 16 bold',bg = '#599442')
 label_probability.grid(row = 14, column = 7)
-################################################################################
+############################### LIST BOX #######################################
+
+
+def sel_hotel():
+    #execfile('listbox.py')
+    from listbox import * #DA CONTROLLARE
+    #si usa value come var globale che contiene la stringa dell'hotel
+
+
+selHotel_button = tk.Button(root, text = "Select Hotel", command = sel_hotel, font='Helvetica 10 bold',bg='white')
+selHotel_button.grid(row = 1, column = 1)
+
+
+
 
 root.mainloop()
