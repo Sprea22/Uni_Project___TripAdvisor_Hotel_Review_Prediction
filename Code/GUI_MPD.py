@@ -374,11 +374,8 @@ rate5.grid(row=13, column=6)
 label_predictvalue = tk.Label(root, text= "Predict value:4", font='Helvetica 16 bold',bg = '#599442')
 label_predictvalue.grid(row = 14, column = 1, padx=10)
 
-label_accuracy = tk.Label(root, text= "Accuracy: 95%", font='Helvetica 16 bold',bg = '#599442')
-label_accuracy.grid(row = 14, column = 7)
+label_probability = tk.Label(root, text= "Prob: 95%", font='Helvetica 16 bold',bg = '#599442')
+label_probability.grid(row = 14, column = 7)
 ################################################################################
-
-close_window_main = tk.Button(root, text="Close Window", command=root.destroy, font='Helvetica 10 bold',bg='#ff4500',fg='black')
-close_window_main.grid(row = 1, column = 14)
 
 root.mainloop()
