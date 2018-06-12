@@ -37,6 +37,7 @@ def Generate_CPTs(data_cpts, data, cols, root):
 
 def Compute_CPT(data, root):
     data = data.replace(-1, 0)
+
     r,c = data.shape
     index = np.unique(data[root])
 
@@ -56,23 +57,22 @@ def Compute_CPT(data, root):
     for node in cols:
         CPT_node = pd.DataFrame()
         p_val_node = np.unique(data[node])
-        flag = False
+        #flag = False
         for df in dfs:
             x = df.groupby(node)[node].count()
-
             val_node = x.index.values
             CPT = [0] * len(p_val_node)
-
             for i in val_node:
-                if (i == -1):
-                    CPT[len(p_val_node)-1] = x[i] / x.sum().astype(float)
-                    flag = True
-                else:
-                    CPT[i] = x[i] / x.sum().astype(float)
+                #if (i == -1):
+                #    print("ESGHERE")
+                #    CPT[len(p_val_node)-1] = x[i] / x.sum().astype(float)
+                #    flag = True
+                #else:
+                CPT[i] = x[i] / x.sum().astype(float)
 
             CPT_node = CPT_node.append(pd.Series(np.array(CPT)), ignore_index = True)
-        if (flag):
-            CPT_node.rename(columns = {len(p_val_node)-1:-1}, inplace = True)
+        #if (flag):
+        #    CPT_node.rename(columns = {len(p_val_node)-1:-1}, inplace = True)
 
         CPT_node.index = CPT_node.index.values + 1
         CPTs.append(CPT_node)

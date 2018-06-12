@@ -4,19 +4,27 @@ import csv
 import numpy as np
 import pandas as pd
 
-#Full_Dataset_Hotels = pd.read_csv("../Datasets/Full_Dataset_Hotel.csv")
-Full_Dataset_Reviews = pd.read_csv("../Datasets/Dataset_Total.csv")
+Full_Dataset_Hotels = pd.read_csv("../../Datasets/Original/Full Original/Full_Dataset_Hotel.csv")
+Full_Dataset_Reviews = pd.read_csv("../../Datasets/Original/Full Original/Full_Dataset_Reviews.csv")
 # Decomment if you want to regenerate the training, testing and hotels Datasets
 # With a smaller number of reviews.
 
+Full_Dataset_Reviews["Null_Counter"] = Full_Dataset_Reviews.isin({-1}).sum(1)
+
+data = Full_Dataset_Reviews.loc[Full_Dataset_Reviews["Null_Counter"] < 4]
+
+# Drop the columns from the dataset that are not needed
+toDeleteColumns = ["Date", "Author", "No. Reader", "No. Helpful", "Null_Counter"]
+data = data.drop(columns=toDeleteColumns)
+
 # Grouping the full dataset by Overall rating (1,2,3,4,5)
-gb = Full_Dataset_Reviews.groupby(['Overall'])
+gb = data.groupby(['Overall'])
 
 # Splitting the grouped Reviews into 5 different dataframes
 Df1, Df2, Df3, Df4, Df5 = [gb.get_group(x) for x in gb.groups]
 
 # Number of reviews per each Overall Rating values
-n = 9000
+n = 6500
 
 # Sampling N reviews from the Df1: it contains just the reviews with "Overall" = 1
 Df1 = Df1.sample(n)
@@ -48,15 +56,18 @@ Df_Train = pd.concat([Df1_train, Df2_train, Df3_train, Df4_train, Df5_train])
 Df_Test = pd.concat([Df1_test, Df2_test, Df3_test, Df4_test, Df5_test])
 
 # Concatenating the Training and Testing set in order to get the Total dataset
-Df_Tot = pd.concat([Df_Train, Df_Test])
+Reviews = pd.concat([Df_Train, Df_Test])
 # Modify the dataset about the hotels, because all the reviews about a single Hotels
 # could have been deleted, so it doesn't make sense to keep the Hotel into the Hotels dataset
-Df_Bool = Full_Dataset_Hotels['Hotel_ID'].isin(Df_Tot['Hotel_ID'])
+Df_Bool = Full_Dataset_Hotels['Hotel_ID'].isin(Reviews['Hotel_ID'])
 Df_Hotel = Full_Dataset_Hotels[Df_Bool]
 
+print(Df_Hotel)
 # Decomment if you want to save the datasets
 
-#   Df_Hotel.to_csv("Hotels.csv", sep=',')
-#   Df_Train.to_csv("Training.csv", sep=',')
-#   Df_Test.to_csv("Testing.csv", sep=',')
-#   Df_Tot.to_csv("Dataset_TOT.csv", sep=',')
+'''
+Df_Hotel.to_csv("Hotels.csv", sep=',')
+Df_Train.to_csv("Training.csv", sep=',')
+Df_Test.to_csv("Testing.csv", sep=',')
+Reviews.to_csv("Dataset_TOT.csv", sep=',')
+'''
