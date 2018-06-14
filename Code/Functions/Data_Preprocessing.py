@@ -2,6 +2,7 @@ import re
 import nltk
 import string
 import itertools
+import pandas as pd
 from nltk import FreqDist
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -51,22 +52,20 @@ def data_Preprocessing(data, data_test, n_of_words, polarity_threshold):
     for i in range (0,n_of_words):
         Most_Common_Words.append(Most_Common_Words_Frequency[i][0])
 
+    index = 1
+    words_and_polarity = pd.DataFrame(columns=["Word", "Polarity"])
     Selected_Words = []
     # Terms polarity
     for word in Most_Common_Words:
         try:
             temp = sn.polarity_intense(word)
             if (float(temp) > polarity_threshold or float(temp) < -(polarity_threshold)):
+                words_and_polarity.loc[index] = [word, float(temp)]
+                index = index + 1
                 Selected_Words.append(word)
         except Exception:
             continue
-
-    # Add the selected words to the dataframe (boolean)
-    data = addColumns(data, Selected_Words)
-    data_test = addColumns(data_test, Selected_Words)
-
-    # Drop the columns that are not needed
-    data = data.drop(columns=["Hotel_ID", "Content", "Unnamed: 0"])
-    data_test = data_test.drop(columns=["Hotel_ID", "Content", "Unnamed: 0"])
+    # Decomment if you want to recomputer the selected words and their polarity
+    #words_and_polarity.to_csv("Words_and_Polarity.csv", sep=",")
 
     return data, data_test
