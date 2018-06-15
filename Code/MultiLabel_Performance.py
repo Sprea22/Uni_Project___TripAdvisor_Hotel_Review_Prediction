@@ -8,10 +8,10 @@ from Functions.Bayesian_Net_Model import Bayesian_Net_Model
 # Report a file with the indexes of the "Strange" reviews
 
 train = pd.read_csv("../Datasets/Final_Processed_Testing.csv")
-train = train.sample(2000)
+#train = train.sample(2000)
 
 test = pd.read_csv("../Datasets/Final_Processed_Testing.csv")
-test = test.sample(100)
+#test = test.sample(100)
 
 true_label = test["Overall"]
 
@@ -62,7 +62,7 @@ for i in range(0, len(true_values)):
         idx.append(i)
         print(true_values[i], pred_label1[i], pred_label2[i])
         print(test.iloc[i])
-ac = acc / len(true_values)
+acc = acc / len(true_values)
 
-#print("Accuracy: ", acc)
-#print("Indexes of strange reviews", idx)
+print("Accuracy: ", acc)
+print("Indexes of strange reviews", idx)

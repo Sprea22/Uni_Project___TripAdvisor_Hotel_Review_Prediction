@@ -1,3 +1,4 @@
+
 import matplotlib
 import pandas as pd
 import tkinter as tk
@@ -12,17 +13,24 @@ from Functions.GUI_Inference import single_Inference
 from Functions.Data_Preprocessing import data_Preprocessing
 from Functions.Bayesian_Net_Model import Bayesian_Net_Model
 from Functions.Data_Terms_Adding import addColumns
+import re
+
 ############ ############ ############ ############ ############
 ###         Actions once the "Update" button is clicked      ###
 ############ ############ ############ ############ ############
+
 def update_overall():
     ################### CHANGE COLOR FIND WORD #################################
     punctuation = string.punctuation
     cc = pd.read_csv("../Datasets/Words&Polarity_Choosen.csv")
     text_insert = parameter_1.get(1.0, END)
-    text_insert = text_insert.replace(" "," ~ ")
+
+    text_insert = text_insert.replace("\n","~")
+    text_insert = text_insert.replace(" "," ^ ")
     partwords = wordpunct_tokenize(text_insert)
+    partwords = partwords[:-1]
     parameter_1.delete('1.0', END)
+
     for i in range(0,len(partwords)):
         count = 0
         nocount = 0
@@ -32,14 +40,34 @@ def update_overall():
             else:
                 nocount = nocount + 1
             if(nocount == len(cc["terms"])):
-                if(partwords[i] == '~'):
+                if(partwords[i] == '^'):
                     partwords[i] = " "
+                n_a_capo = 0
+                match = re.search('([~]+)', partwords[i])
+                spazi = []
+                if match:
+                    n_a_capo = len(match.group())
+                    while(n_a_capo > 0):
+                        spazi.append("\n")
+                        n_a_capo = n_a_capo -1
+                    partwords[i] = ''.join(spazi)
+
                 parameter_1.insert(END,partwords[i],'BL')
                 parameter_1.tag_config('BL', foreground='black')
 
             if(count == 1):
-                if(partwords[i] == '~'):
+                if(partwords[i] == '^'):
                     partwords[i] = " "
+                n_a_capo = 0
+                match = re.search('([~]+)', partwords[i])
+                spazi = []
+                if match:
+                    n_a_capo = len(match.group())
+                    while(n_a_capo > 0):
+                        spazi.append("\n")
+                        n_a_capo = n_a_capo -1
+                    partwords[i] = ''.join(spazi)
+
                 parameter_1.insert(END,partwords[i],'RED')
                 parameter_1.tag_config('RED', foreground='red')
                 break
@@ -118,14 +146,21 @@ def update_overall():
 print("Building the GUI interface..")
 root = tk.Tk()
 root.title("GUI Interface - MPD - TripAdvisor Project")
-#size windows
-#root.geometry("900x900")
-#size full windows
+root.focus_set()
 
-width = root.winfo_screenwidth()
-height = root.winfo_screenheight()
-root.geometry('%sx%s' % (width, height))
-#change windows color
+var = 0
+root.geometry("1350x650")
+def f(event):
+    global var
+    if var == 0:
+        root.attributes("-fullscreen", True)
+        var = 1
+    else:
+        root.attributes("-fullscreen", False)
+        var = 0
+
+root.bind("<F11>", f)
+
 root.configure(background='#599442')
 
 ############ ############ ############ ############ ############
@@ -140,7 +175,7 @@ inference_model = VariableElimination(BN_Model)
 # Set the entry for the first parameter
 var1_descr = " Enter a text review: "
 label_descr1 = tk.Label(root, text=var1_descr, font='Helvetica 11 bold',bg = '#599442')
-parameter_1 = tkst.ScrolledText(root, width =50, height=5, wrap = WORD, bd = 3, font='Helvetica 10')
+parameter_1 = tkst.ScrolledText(root, width = 75, height=5, wrap = WORD, bd = 3, font='Helvetica 10')
 #parameter_1 = tk.Entry(root, width =100, bd=3)
 
 ######################### RADIOBUTTON 1 ########################################
@@ -304,7 +339,7 @@ var6 = tk.StringVar()
 
 #label over radiobutton
 label_term6 = tk.Label(root, text= "Service:", font='Helvetica 10 bold',bg = '#599442')
-label_term6.grid(row = 10, column = 7, padx=10, pady=10)
+label_term6.grid(row = 10, column = 7, padx=70, pady=10)
 
 #radiobutton
 rate1 = tk.Radiobutton(text='1', variable=var6, bg = 'white', font='Helvetica 9 bold', selectcolor ='#888888')
@@ -335,7 +370,7 @@ var7 = tk.StringVar()
 
 #label over radiobutton
 label_term7 = tk.Label(root, text= "Businness Service:", font='Helvetica 10 bold',bg = '#599442')
-label_term7.grid(row = 11, column = 7, padx=10, pady=10)
+label_term7.grid(row = 11, column = 7, padx=20, pady=10)
 
 #radiobutton
 rate1 = tk.Radiobutton(text='1', variable=var7, bg = 'white', font='Helvetica 9 bold', selectcolor ='#888888')
@@ -363,16 +398,13 @@ rate5.grid(row=11, column=12)
 def create_window():
     subroot = Toplevel()
     subroot.title("Bayesian Network Model")
-    #subroot.geometry('500x400')
-    width = subroot.winfo_screenwidth()
-    height = subroot.winfo_screenheight()
-    subroot.geometry('%sx%s' % (width, height))
+    subroot.geometry('500x480')
     subroot.configure(background='white')
-    tk_img = ImageTk.PhotoImage(file='GUI/ImageBayesianNet.png')
-    canvas = tk.Canvas(subroot, width=1350, height=600,bg = 'white', highlightbackground='black')
-    canvas.create_image(650, 400, image=tk_img, anchor = CENTER)
+    tk_img = ImageTk.PhotoImage(file='GUI/NaiveBayes Tripadvisor.png')
+    canvas = tk.Canvas(subroot, width=500, height=400,bg = 'white', highlightbackground='white')
+    canvas.create_image(250, 200, image=tk_img, anchor = CENTER)
     canvas.grid(row=1, column=1, pady = 5)
-    close_window = tk.Button(subroot, text="Close Window", command=subroot.destroy, font='Helvetica 10 bold',bg='#ff4500',fg='black')
+    close_window = tk.Button(subroot, text="Close Window", command=subroot.destroy, font='Helvetica 10 bold',bg='red',fg='black')
     close_window.grid(row = 2, column = 1)
     subroot.mainloop()
 ############ ############ ############ ############
@@ -419,6 +451,10 @@ rate5.config(indicatoron=0, bd=1, width=2, value='rate5')
 rate5.grid(row=13, column=6)
 
 ################################################################################
+result = Frame(root,  highlightbackground="white", highlightthickness=1, relief=SUNKEN, bd= 3) #relief=SUNKEN si puo' togliere e rimane senza spessore
+result.grid(row = 14, column = 13)
+result.place(height=180, width=280, x=820, y=455)
+result.config(background="#599442")
 
 label_firstpredictvalue = tk.Label(root, text= "Pred 1st Value: -", font='Helvetica 16 bold',bg = '#599442')
 label_firstpredictvalue.grid(row = 14, column = 13, padx=10)
@@ -443,7 +479,7 @@ update_button = tk.Button(root, text = "Update", command = update_overall, font=
 # Grid is used to add the widgets to root
 # Alternatives are Pack and Place
 label_descr1.grid(row = 9, column = 13, padx = 10)
-parameter_1.grid(row = 10, column = 13,padx = 40)
+parameter_1.grid(row = 10, column = 13,padx = 100)
 update_button.grid(row = 11, column = 13)
 
 print("GUI Interface is ready!\n")
